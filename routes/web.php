@@ -47,6 +47,8 @@ Route::middleware(["auth"])->group(function() {
 			Route::get("/", "IncomeController@index")->name("index");
 			Route::get("/new", "IncomeController@new")->name("new");
 			Route::get("/{income}", "IncomeController@edit")->name("edit");
+			Route::post("/", "IncomeController@create")->name("create");
+			Route::post("/{income}/update", "IncomeController@update")->name("update");
 		});
 		Route::name("expenditure.")->prefix("expenditure")->group(function() {
 			Route::get("/", "ExpenditureController@index")->name("index");
