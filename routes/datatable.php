@@ -16,5 +16,11 @@ Route::middleware(["auth"])->group(function() {
 		Route::name("admission.")->prefix("admission")->group(function() {
 			Route::get("/", "AdmissionController@index")->name("index");
 		});
+		Route::name("income.")->prefix("income")->group(function() {
+			Route::get("/", "IncomeController@index")->name("index");
+		});
+		Route::name("expenditure.")->prefix("expenditure")->group(function() {
+			Route::get("/", "ExpenditureController@index")->name("index");
+		});
 	});
 });

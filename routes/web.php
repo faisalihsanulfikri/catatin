@@ -43,6 +43,16 @@ Route::middleware(["auth"])->group(function() {
 			Route::get("/", "AdmissionController@index")->name("index");
 			Route::get("/{admission}", "AdmissionController@edit")->name("edit");
 		});
+		Route::name("income.")->prefix("income")->group(function() {
+			Route::get("/", "IncomeController@index")->name("index");
+			Route::get("/new", "IncomeController@new")->name("new");
+			Route::get("/{income}", "IncomeController@edit")->name("edit");
+		});
+		Route::name("expenditure.")->prefix("expenditure")->group(function() {
+			Route::get("/", "ExpenditureController@index")->name("index");
+			Route::get("/new", "ExpenditureController@new")->name("new");
+			Route::get("/{expenditure}", "ExpenditureController@edit")->name("edit");
+		});
 	});
 });
 
