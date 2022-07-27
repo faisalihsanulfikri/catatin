@@ -7,11 +7,11 @@ use App\Traits\Meta\GetterDate;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Lesson extends Model
+class Income extends Model
 {
     use GetterId, GetterDate;
 
-    protected $table = "lesson";
+    protected $table = "income";
     protected $primaryKey = "id";  
     public $incrementing = true;
     public $timestamps = true;
