@@ -27,7 +27,8 @@ class CreateRequest extends FormRequest
       ],
       "amount" => [
         "required",
-        "integer"
+        "integer",
+        "min:1000",
       ],
 		];
   }
@@ -42,6 +43,7 @@ class CreateRequest extends FormRequest
 
       'amount.required' => 'Total wajib diisi',
       'amount.integer' => 'Total tidak valid',
+      'amount.min' => 'Minimal total adalah 1000',
       
     ];
   }

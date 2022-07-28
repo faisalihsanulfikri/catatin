@@ -25,6 +25,7 @@ class ExpenditureController extends Controller
 
   public function create(CreateRequest $request)
   {
+    DB::beginTransaction();
     try {     
       $expenditure = Expenditure::create([
         'date' => $request->get('date'),
@@ -33,10 +34,14 @@ class ExpenditureController extends Controller
         'user_id' => Auth::user()->getId()
       ]);
 
+      $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->reduce($request->get('amount'));
+
+      DB::commit();
       return redirect()->route("admin.expenditure.edit", $expenditure->id)
       ->with("status", "success")
       ->with("message", "Berhasil menambahkan data");
     } catch (\Throwable $th) {
+      DB::rollback();
       Log::error($th->getMessage());
       Log::error($th->getTraceAsString());
       return redirect()->route("admin.expenditure.new")
@@ -61,6 +66,7 @@ class ExpenditureController extends Controller
   {
     DB::beginTransaction();
     try {
+      $oldAmount = $expenditure->amount;
       $expenditureId = $expenditure->id;
       if (isset($expenditure)) {
         $expenditure->date = $request->get('date');
@@ -68,6 +74,8 @@ class ExpenditureController extends Controller
         $expenditure->amount = $request->get('amount');
         $expenditure->save();
   
+        $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->updateExpenditure($oldAmount, $request->get('amount'));
+
         DB::commit();
         return redirect()->route("admin.expenditure.edit", $expenditureId)
         ->with("status", "success")

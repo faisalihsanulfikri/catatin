@@ -27,6 +27,7 @@ class IncomeController extends Controller
 
   public function create(CreateRequest $request)
   {
+    DB::beginTransaction();
     try {     
       $income = Income::create([
         'date' => $request->get('date'),
@@ -35,10 +36,14 @@ class IncomeController extends Controller
         'user_id' => Auth::user()->getId()
       ]);
 
+      $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->add($request->get('amount'));
+
+      DB::commit();
       return redirect()->route("admin.income.edit", $income->id)
       ->with("status", "success")
       ->with("message", "Berhasil menambahkan data");
     } catch (\Throwable $th) {
+      DB::rollback();
       Log::error($th->getMessage());
       Log::error($th->getTraceAsString());
       return redirect()->route("admin.income.new")
@@ -63,13 +68,16 @@ class IncomeController extends Controller
   {
     DB::beginTransaction();
     try {
+      $oldAmount = $income->amount;
       $incomeId = $income->id;
       if (isset($income)) {
         $income->date = $request->get('date');
         $income->description = $request->get('description');
         $income->amount = $request->get('amount');
         $income->save();
-  
+
+        $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->updateIncome($oldAmount, $request->get('amount'));
+
         DB::commit();
         return redirect()->route("admin.income.edit", $incomeId)
         ->with("status", "success")
