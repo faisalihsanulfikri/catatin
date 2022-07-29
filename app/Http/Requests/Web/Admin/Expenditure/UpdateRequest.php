@@ -19,8 +19,8 @@ class UpdateRequest extends FormRequest
 
   public function rules(): array
   {
-    $expenditure = Expenditure::where('id', $this->route('expenditure'))->first();
-    $this->wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->getWealth() - $expenditure->amount + $this->request()->amount;
+    $expenditure = $this->route('expenditure');
+    $this->wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->getWealth()->amount + $expenditure->amount;
 
     return [
       "date" => [
@@ -35,7 +35,7 @@ class UpdateRequest extends FormRequest
         "required",
         "integer",
         "min:1000",
-        "max:".$this->wealth->amount,
+        "max:".$this->wealth,
       ],
 		];
   }
@@ -51,7 +51,7 @@ class UpdateRequest extends FormRequest
       'amount.required' => 'Total wajib diisi',
       'amount.integer' => 'Total tidak valid',
       'amount.min' => 'Minimal total adalah 1000',
-      'amount.max' => 'Maksimal total adalah '.$this->wealth->amount,
+      'amount.max' => 'Maksimal total adalah '.$this->wealth,
     ];
   }
   

@@ -17,7 +17,7 @@ class CreateRequest extends FormRequest
   
   public function rules(): array
   {
-    $this->wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->getWealth();
+    $this->wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->getWealth()->amount;
 
     return [
       "date" => [
@@ -32,7 +32,7 @@ class CreateRequest extends FormRequest
         "required",
         "integer",
         "min:1000",
-        "max:".$this->wealth->amount,
+        "max:".$this->wealth,
       ],
 		];
   }
@@ -48,7 +48,7 @@ class CreateRequest extends FormRequest
       'amount.required' => 'Total wajib diisi',
       'amount.integer' => 'Total tidak valid',
       'amount.min' => 'Minimal total adalah 1000',
-      'amount.max' => 'Maksimal total adalah '.$this->wealth->amount,
+      'amount.max' => 'Maksimal total adalah '.$this->wealth,
     ];
   }
   
