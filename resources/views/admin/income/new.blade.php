@@ -67,7 +67,7 @@
               <form method="post" action="{{ route('admin.income.create') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="row">
-                  <div class="col-6">
+                  <div class="col-12">
                     <div class="form-group">
                       <label for="date">Tanggal <strong class="text-danger">*</strong></label>
                       <input type="text" name="date" class="form-control" id="date" required>

@@ -27,5 +27,12 @@ class Wealth extends Model
     protected $guarded = [];
     protected $hidden = [];
     protected $casts = [];
-    protected $appends = [];
+    protected $appends = [
+        'formated_amount'
+    ];
+
+    public function getFormatedAmountAttribute()
+    {
+        return number_format($this->amount);
+    }
 }
