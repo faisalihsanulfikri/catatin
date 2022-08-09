@@ -21,7 +21,7 @@
         </li>
         <li class="menu">
           <a href="{{ route('admin.income.index') }}" 
-            {{ in_array(Route::currentRouteName(), ["admin.income.index"]) ? "data-active=true" : "" }}
+            {{ in_array(Route::currentRouteName(), ["admin.income.index", "admin.income.new", "admin.income.edit"]) ? "data-active=true" : "" }}
             aria-expanded="false" 
             class="dropdown-toggle"
             >
@@ -33,7 +33,7 @@
         </li>
         <li class="menu">
           <a href="{{ route('admin.expenditure.index') }}" 
-            {{ in_array(Route::currentRouteName(), ["admin.expenditure.index"]) ? "data-active=true" : "" }}
+            {{ in_array(Route::currentRouteName(), ["admin.expenditure.index", "admin.expenditure.new", "admin.expenditure.edit"]) ? "data-active=true" : "" }}
             aria-expanded="false" 
             class="dropdown-toggle"
             >

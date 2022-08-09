@@ -184,7 +184,7 @@
           }
         ],
         xaxis: {
-          categories: data.map(expenditure => moment(expenditure.date).locale("id").format('DD MMMM YYYY')),                
+          categories: data.map(expenditure => moment(expenditure.date).locale("id").format('DD MMM')),                
         },
         tooltip: {
           x: {

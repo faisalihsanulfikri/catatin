@@ -11,9 +11,18 @@
   <div class="container">
     <div class="container">
 
-      <a href="{{ route('admin.expenditure.index') }}" class="btn btn-danger mt-4">
-        Kembal
-      </a> 
+      <div class="row">
+        <div class="col">
+          <a href="{{ route('admin.expenditure.index') }}" class="btn btn-danger mt-4">
+            Kembal
+          </a> 
+        </div>
+        <div class="col">
+          <a href="{{ route('admin.expenditure.new') }}" class="btn btn-primary mt-4 float-right">
+            Tambah
+          </a> 
+        </div>
+      </div>
 
       <div class="widget-content-area br-4 mt-3">
         <div class="widget-one">
