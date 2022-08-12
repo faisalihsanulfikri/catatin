@@ -36,7 +36,7 @@ class IncomeController extends Controller
         'user_id' => Auth::user()->getId()
       ]);
 
-      $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->add($request->get('amount'));
+      $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->snycWealth();
 
       DB::commit();
       return redirect()->route("admin.income.edit", $income->id)
@@ -76,7 +76,7 @@ class IncomeController extends Controller
         $income->amount = $request->get('amount');
         $income->save();
 
-        $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->updateIncome($oldAmount, $request->get('amount'));
+        $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->snycWealth();
 
         DB::commit();
         return redirect()->route("admin.income.edit", $incomeId)

@@ -12,20 +12,30 @@
       
       <div class="row">
         <div class="col">
-          <div class="widget-content-area br-4 mt-4">
+          <div class="widget-content-area br-4 mt-4 title-container">
             <div class="widget-one">
               <div class="row">
                 <div class="col">
-                  <h5 class="title-page">Summary</h5>
+                  <h5 class="title-page pt-100">Summary</h5>
                 </div>
                 <div class="col">
-                  <h5 class="title-page float-right" id="monthName"></h5>
+                  <div class="row">
+                    <div class="col-4">&nbsp;</div>
+                    <div class="col-6">
+                      <select class="form-control form-control-sm basic float-right title-page" id="month"></select>
+                    </div>
+                    <div class="col-2">
+                      <h5 class="title-page float-right pt-100" id="year"></h5>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+
 
       <div class="row">
         <div class="col mt-4">
@@ -59,7 +69,7 @@
                     <i data-feather="database"></i>
                   </div>
                   <p class="w-value" id="totalWealth">10</p>
-                  <h5 class="">Total Asset</h5>
+                  <h5 class="">Total Asset Per <span id="monthName"></span></h5>
                 </div>
               </div>
             </div>
@@ -83,7 +93,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -106,6 +115,27 @@
       margin-bottom: 0;
       color: #515365;
     }
+    .select2 {
+      margin-bottom: 0px !important;
+    }
+    .select2-selection__rendered {
+      border: 0 !important;
+      font-weight: bold;
+      font-size: 19px !important;
+      letter-spacing: 0px;
+      margin-bottom: 0;
+      color: #515365;
+    }
+    .select2-selection__arrow {
+      padding-top: 2rem !important;
+    }
+    .pt-100 {
+      padding-top: 1rem;
+    }
+    .title-container {
+      padding: 0.1rem 1rem;
+      border-radius: 5px;
+    }
   </style>
 @endpush
 
@@ -114,16 +144,30 @@
   <script src="{{asset('assets/js/dashboard/dash_2.js')}}"></script>
 
   <script type="text/javascript">
+
+    let expenditureChart = null;
     let data = {
-      month : moment().locale("id").format('MM')
+      month : moment().locale("id").format('MM'),
+      expenditures: []
     }
 
-    $(document).ready(function() {
-      setMonthName();
+    $("#month").select2({ tags: true });
 
+    $(document).ready(function() {   
+      generateSelectMonth($('#month'));
+      setYear();
+      setMonthName();
       fetchIncomeSummaryMonthly();
       fetchExpenditureSummaryMonthly();
-      fetchWealthSummary();
+      fetchWealthSummaryMonthly();
+    });
+
+    $('#month').on('change', function(e) {
+      data.month = $(this).val();
+      setMonthName();
+      fetchIncomeSummaryMonthly();
+      fetchExpenditureSummaryMonthly(true);
+      fetchWealthSummaryMonthly();
     });
 
     function fetchIncomeSummaryMonthly() {
@@ -142,7 +186,7 @@
         });
     }
 
-    function fetchExpenditureSummaryMonthly() {
+    function fetchExpenditureSummaryMonthly(update = false) {
       request({
           url: `{{ route('json.admin.expenditure.summary-monthly') }}`,
           method: 'GET',
@@ -150,8 +194,14 @@
             month: data.month
           },
           success: function(response) {
-            generateExpenditureChart(response.data.expenditures);
             setTotalExpenditure(response.data.totalExpenditure);
+            
+            if (update) {
+              data.expenditures = response.data.expenditures;
+              updateChart()
+            } else {
+              generateExpenditureChart(response.data.expenditures);
+            }
           },
           error: function(error) {  
             fetchExpenditureSummaryMonthly()
@@ -159,18 +209,18 @@
         });
     }
 
-    function fetchWealthSummary() {
+    function fetchWealthSummaryMonthly() {
       request({
-          url: `{{ route('json.admin.wealth.summary') }}`,
+          url: `{{ route('json.admin.wealth.summary-monthly') }}`,
           method: 'GET',
           data: {
             month: data.month
           },
           success: function(response) {
-            setTotalWealth(response.data.formated_amount);
+            setTotalWealth(response.data.totalAsset);
           },
           error: function(error) {  
-            fetchWealthSummary()
+            fetchWealthSummaryMonthly()
           }
         });
     }
@@ -206,13 +256,45 @@
         }
       }
 
-      var chart = new ApexCharts(document.querySelector("#s-line-area"),sLineArea);
-      chart.render();
+      expenditureChart = new ApexCharts(document.querySelector("#s-line-area"), sLineArea);
+      expenditureChart.render();
+    }
+
+    function generateSelectMonth(element) {
+      let months = [
+        { id: '01', name: 'Januari' },
+        { id: '02', name: 'Februari' },
+        { id: '03', name: 'Maret' },
+        { id: '04', name: 'April' },
+        { id: '05', name: 'Mei' },
+        { id: '06', name: 'Juni' },
+        { id: '07', name: 'Juli' },
+        { id: '08', name: 'Agustus' },
+        { id: '09', name: 'September' },
+        { id: '10', name: 'Oktober' },
+        { id: '11', name: 'November' },
+        { id: '12', name: 'Desember' },
+      ];
+
+      element.html("");
+      let html = '';
+
+      months.forEach(month => {
+        let selected = month.id == moment().locale("id").format('MM') ? 'selected' : '';
+        html += `<option value="${month.id}" ${selected}>${month.name}</option>`;
+      });
+
+      element.html(html);
+    }
+
+    function setYear() {
+      $('#year').text(moment().locale("id").format('YYYY'));
     }
 
     function setMonthName() {
-      $('#monthName').text(moment().locale("id").format('MMMM YYYY'));
-      $('#monthNameChart').text(moment().locale("id").format('MMMM YYYY'));
+      let date = getDate();
+      $('#monthName').text(moment(date).locale("id").format('MMMM YYYY'));
+      $('#monthNameChart').text(moment(date).locale("id").format('MMMM YYYY'));
     }
     
     function setTotalIncome(total) {
@@ -227,6 +309,23 @@
       $('#totalWealth').text(total);
     }
 
+    function getDate() {
+      return `${moment().locale("id").format('YYYY')}-${data.month}-01`;
+    }
+
+    function updateChart() {
+      expenditureChart.updateOptions({
+        series: [
+          {
+            name: 'Pengeluaran',
+            data: data.expenditures.map(expenditure => expenditure.total_amount)
+          }
+        ],
+        xaxis: {
+          categories: data.expenditures.map(expenditure => moment(expenditure.date).locale("id").format('DD MMM')),                
+        },
+      });
+    }
 
   </script>
 @endpush

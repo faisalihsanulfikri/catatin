@@ -44,6 +44,7 @@ Route::middleware(["auth"])->group(function() {
 		});
 		Route::name("wealth.")->prefix("wealth")->group(function() {
 			Route::get("/summary", "WealthController@summary")->name("summary");
+			Route::get("/summary-monthly", "WealthController@summaryMonthly")->name("summary-monthly");
 		});
 	});
 });

@@ -43,6 +43,18 @@
             </div>
           </a>
         </li>
+        <li class="menu">
+          <a href="{{ route('admin.summary.index') }}" 
+            {{ in_array(Route::currentRouteName(), ["admin.summary.index"]) ? "data-active=true" : "" }}
+            aria-expanded="false" 
+            class="dropdown-toggle"
+            >
+            <div class="">
+              <i data-feather="airplay"></i>
+              <span> Summary</span> 
+            </div>
+          </a>
+        </li>
       @endif
       {{-- END MENU ADMINISTRATOR --}}
     </ul>

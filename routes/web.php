@@ -57,6 +57,9 @@ Route::middleware(["auth"])->group(function() {
 			Route::post("/", "ExpenditureController@create")->name("create");
 			Route::post("/{expenditure}/update", "ExpenditureController@update")->name("update");
 		});
+		Route::name("summary.")->prefix("summary")->group(function() {
+			Route::get("/", "SummaryController@index")->name("index");
+		});
 	});
 });
 

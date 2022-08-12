@@ -34,7 +34,7 @@ class ExpenditureController extends Controller
         'user_id' => Auth::user()->getId()
       ]);
 
-      $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->reduce($request->get('amount'));
+      $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->snycWealth();
 
       DB::commit();
       return redirect()->route("admin.expenditure.edit", $expenditure->id)
@@ -74,7 +74,7 @@ class ExpenditureController extends Controller
         $expenditure->amount = $request->get('amount');
         $expenditure->save();
   
-        $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->updateExpenditure($oldAmount, $request->get('amount'));
+        $wealth = app(\App\Http\Controllers\Web\Admin\WealthController::class)->snycWealth();
 
         DB::commit();
         return redirect()->route("admin.expenditure.edit", $expenditureId)
