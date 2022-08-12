@@ -15,6 +15,14 @@ use App\Models\Wealth;
 
 class IncomeController extends Controller
 {
+  public function summary() 
+  {
+    $totalIncome = Income::selectRaw('SUM(amount) as total_amount')->where('user_id', $this->userId)->first()->total_amount;
+    return (new Response())->setData([
+      'totalIncome' => number_format($totalIncome ? $totalIncome : 0),
+    ])->send();
+  }
+  
   public function summaryMonthly() 
   {
     $date = $this->getDate();

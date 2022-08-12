@@ -37,9 +37,11 @@ Route::middleware(["auth"])->group(function() {
 			Route::post("/{admission}/unapprove", "AdmissionController@unapprove")->name("unapprove");
 		});
 		Route::name("income.")->prefix("income")->group(function() {
+			Route::get("/summary", "IncomeController@summary")->name("summary");
 			Route::get("/summary-monthly", "IncomeController@summaryMonthly")->name("summary-monthly");
 		});
 		Route::name("expenditure.")->prefix("expenditure")->group(function() {
+			Route::get("/summary", "ExpenditureController@summary")->name("summary");
 			Route::get("/summary-monthly", "ExpenditureController@summaryMonthly")->name("summary-monthly");
 		});
 		Route::name("wealth.")->prefix("wealth")->group(function() {

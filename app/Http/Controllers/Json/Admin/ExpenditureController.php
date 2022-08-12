@@ -15,6 +15,14 @@ use App\Models\Wealth;
 
 class ExpenditureController extends Controller
 {
+  public function summary() 
+  {
+    $totalExpenditure = Expenditure::selectRaw('SUM(amount) as total_amount')->where('user_id', $this->userId)->first()->total_amount;
+    return (new Response())->setData([
+      'totalExpenditure' => number_format($totalExpenditure ? $totalExpenditure : 0),
+    ])->send();
+  }
+
   public function summaryMonthly() 
   {
     $date = $this->getDate();
