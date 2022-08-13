@@ -133,7 +133,7 @@
       padding-top: 1rem;
     }
     .title-container {
-      padding: 0.1rem 1rem;
+      padding: 0.4rem 1.3rem;
       border-radius: 5px;
     }
   </style>
