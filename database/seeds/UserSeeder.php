@@ -34,6 +34,18 @@ class UserSeeder extends Seeder
             $user = DB::table('user')->where('email', 'yuni@catatin.com')->first();
             $this->generateWealth($user->id);
         }
+        if(self::countData('faisal-month@catatin.com') == 0){
+            DB::table('user')->insert([
+                'name' => 'Faisal Month',
+                'email' => 'faisal-month@catatin.com',
+                'password' => Hash::make('qwerty'),
+                'user_role_id' => 1,
+            ]);
+
+            $user = DB::table('user')->where('email', 'faisal-month@catatin.com')->first();
+            $this->generateWealth($user->id);
+
+        }
     }
 
     public function generateWealth($user_id)
