@@ -19,7 +19,7 @@ class ExpenditureController extends Controller
       $expenditures = $expenditures->where('description', 'like', '%'.$request->search['value'].'%');
     }
 
-    $expenditures = $expenditures->orderBy('date', 'DESC');
+    $expenditures = $expenditures->orderBy('date', 'DESC')->orderBy('id', 'DESC');
     $expenditures = $expenditures->get();
     return Datatables::of($expenditures)
       ->addIndexColumn()

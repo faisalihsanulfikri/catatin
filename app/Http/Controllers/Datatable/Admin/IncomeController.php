@@ -19,7 +19,7 @@ class IncomeController extends Controller
       $incomes = $incomes->where('description', 'like', '%'.$request->search['value'].'%');
     }
 
-    $incomes = $incomes->orderBy('date', 'DESC');
+    $incomes = $incomes->orderBy('date', 'DESC')->orderBy('id', 'DESC');
     $incomes = $incomes->get();
     return Datatables::of($incomes)
       ->addIndexColumn()
