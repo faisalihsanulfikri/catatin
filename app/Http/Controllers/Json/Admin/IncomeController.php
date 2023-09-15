@@ -26,12 +26,10 @@ class IncomeController extends Controller
   public function summaryMonthly() 
   {
     $date = getDateFromMonth(request()->month);
-    $firstDate = Carbon::parse($date)->format("Y-m")."-01";
-    $endDate = Carbon::parse($date)->endOfMonth()->format("Y-m-d");
 
     $incomes = Income::selectRaw('SUM(amount) as total_amount, date')
       ->where('user_id', Auth::user()->getId())
-      ->wherebetween("date", [$firstDate, $endDate])
+      ->wherebetween("date", [$date->start, $date->end])
       ->groupBy("date")
       ->orderBy("date")
       ->get();

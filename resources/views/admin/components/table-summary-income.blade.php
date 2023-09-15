@@ -53,8 +53,8 @@
 				headers: {
 					'X-CSRF-TOKEN': "{{ csrf_token() }}"
 				},
-        data: {
-          month: dataI.month
+        data : function ( q ) {
+          q.month = dataI.month
         },
 				url: '{{ route("datatable.admin.income.summary") }}',
 				type: 'GET',
@@ -65,5 +65,12 @@
 				{ orderable: false, render: templateDataI.styles.amount },
 			]
 		});
+
+    function reloadTableSummaryIncome(month = null) {
+      if (month) {
+        dataI.month = month;
+      }
+      templateDataI.element.tableSummaryIncome.ajax.reload();
+    }
   </script>
 @endpush

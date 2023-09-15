@@ -34,9 +34,14 @@ class IncomeController extends Controller
 
   public function summary()
   {
-    $incomes = Income::selectRaw('description, SUM(amount) as total_amount')->where('user_id', Auth::user()->getId());
-    $incomes = $incomes->groupBy('description');
-    $incomes = $incomes->get()->sortByDesc('total_amount');
+    $date = getDateFromMonth(request()->month);
+    
+    $incomes = Income::selectRaw('description, SUM(amount) as total_amount')
+              ->where('user_id', Auth::user()->getId())
+              ->wherebetween("date", [$date->start, $date->end])
+              ->groupBy('description')
+              ->get()
+              ->sortByDesc('total_amount');
 
     return Datatables::of($incomes)
       ->addIndexColumn()

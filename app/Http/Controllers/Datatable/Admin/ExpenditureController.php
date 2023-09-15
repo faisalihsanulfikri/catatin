@@ -34,9 +34,14 @@ class ExpenditureController extends Controller
 
   public function summary()
   {
-    $expenditures = Expenditure::selectRaw('description, SUM(amount) as total_amount')->where('user_id', Auth::user()->getId());
-    $expenditures = $expenditures->groupBy('description');
-    $expenditures = $expenditures->get()->sortByDesc('total_amount');
+    $date = getDateFromMonth(request()->month);
+
+    $expenditures = Expenditure::selectRaw('description, SUM(amount) as total_amount')
+                    ->where('user_id', Auth::user()->getId())
+                    ->wherebetween("date", [$date->start, $date->end])
+                    ->groupBy('description')
+                    ->get()
+                    ->sortByDesc('total_amount');
 
     return Datatables::of($expenditures)
       ->addIndexColumn()

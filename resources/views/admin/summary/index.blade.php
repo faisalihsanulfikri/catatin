@@ -109,6 +109,39 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col">
+          <div class="row widget-statistic">
+            <div class="col-6 mb-4">
+              <div class="widget widget-one_hybrid">
+                <div class="widget-content-area br-4 mt-4">
+                  <div class="widget-one">
+                    <h5 class="title-page">Tabel Pemasukan Bulan <span id="monthNameChart3"></span></h5>
+                  </div>
+                  <div>
+                    @component("admin.components.table-summary-income")
+                    @endcomponent
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 mb-4">
+              <div class="widget widget-one_hybrid">
+                <div class="widget-content-area br-4 mt-4">
+                  <div class="widget-one">
+                    <h5 class="title-page">Tabel Pengeluaran Bulan <span id="monthNameChart4"></span></h5>
+                  </div>
+                  <div>
+                    @component("admin.components.table-summary-expenditure")
+                    @endcomponent
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -178,10 +211,13 @@
 
     $('#month').on('change', function(e) {
       data.month = $(this).val();
+
       setMonthName();
       fetchIncomeSummaryMonthly(true);
       fetchExpenditureSummaryMonthly(true);
       fetchWealthSummaryMonthly();
+      reloadTableSummaryIncome($(this).val());
+      reloadTableSummaryExpenditure($(this).val());
     });
 
     function fetchIncomeSummaryMonthly(update = false) {
