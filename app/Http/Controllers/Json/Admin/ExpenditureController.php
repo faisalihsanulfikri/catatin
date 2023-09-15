@@ -25,7 +25,7 @@ class ExpenditureController extends Controller
 
   public function summaryMonthly() 
   {
-    $date = $this->getDate();
+    $date = getDateFromMonth(request()->month);
     $firstDate = Carbon::parse($date)->format("Y-m")."-01";
     $endDate = Carbon::parse($date)->endOfMonth()->format("Y-m-d");
 
@@ -42,12 +42,6 @@ class ExpenditureController extends Controller
       'expenditures' => $expenditures,
       'totalExpenditure' => number_format($totalExpenditure),
     ])->send();
-  }
-
-  private function getDate()
-  {
-    $month = request()->month;
-    return Carbon::parse(Carbon::now()->format("Y")."-$month-01")->format('Y-m-d');
   }
 
 }

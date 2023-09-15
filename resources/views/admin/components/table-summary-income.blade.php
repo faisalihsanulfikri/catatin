@@ -21,6 +21,10 @@
 
 @push("script")
   <script type="text/javascript">
+    let dataI = {
+      month : moment().locale("id").format('MM')
+    }
+
     let templateDataI = {
       element: {
         tableSummaryIncome: $("#tableSummaryIncome"),
@@ -36,8 +40,6 @@
       }
     };
 
-    
-
     templateDataI.element.tableSummaryIncome = templateDataI.element.tableSummaryIncome.DataTable({
       aLengthMenu: [
           [25, 50, 100, 200, -1],
@@ -51,6 +53,9 @@
 				headers: {
 					'X-CSRF-TOKEN': "{{ csrf_token() }}"
 				},
+        data: {
+          month: dataI.month
+        },
 				url: '{{ route("datatable.admin.income.summary") }}',
 				type: 'GET',
 			},

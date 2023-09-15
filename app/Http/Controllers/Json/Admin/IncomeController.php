@@ -25,7 +25,7 @@ class IncomeController extends Controller
   
   public function summaryMonthly() 
   {
-    $date = $this->getDate();
+    $date = getDateFromMonth(request()->month);
     $firstDate = Carbon::parse($date)->format("Y-m")."-01";
     $endDate = Carbon::parse($date)->endOfMonth()->format("Y-m-d");
 
