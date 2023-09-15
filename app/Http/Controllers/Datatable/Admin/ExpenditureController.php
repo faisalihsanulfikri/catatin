@@ -31,4 +31,21 @@ class ExpenditureController extends Controller
       })
       ->make(true);
   }
+
+  public function summary()
+  {
+    $expenditures = Expenditure::selectRaw('description, SUM(amount) as total_amount')->where('user_id', Auth::user()->getId());
+    $expenditures = $expenditures->groupBy('description');
+    $expenditures = $expenditures->get()->sortByDesc('total_amount');
+
+    return Datatables::of($expenditures)
+      ->addIndexColumn()
+      ->editColumn("limit_description", function($expenditure) {
+        return $expenditure->getLimitDescription();
+      })
+      ->editColumn("formated_amount", function($expenditure) {
+        return number_format($expenditure->total_amount);
+      })
+      ->make(true);
+  }
 }

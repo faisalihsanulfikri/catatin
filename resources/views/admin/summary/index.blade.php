@@ -81,14 +81,26 @@
       <div class="row">
         <div class="col">
           <div class="row widget-statistic">
-            <div class="col-12 mb-4">
+            <div class="col-6 mb-4">
               <div class="widget widget-one_hybrid">
                 <div class="widget-content-area br-4 mt-4">
                   <div class="widget-one">
-                    <h5 class="title-page">Pengeluaran Bulan <span id="monthNameChart"></span></h5>
+                    <h5 class="title-page">Pemasukan Bulan <span id="monthNameChart"></span></h5>
                   </div>
                   <div>
-                    <div id="s-line-area" class=""></div>
+                    <div id="income-chart" class=""></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 mb-4">
+              <div class="widget widget-one_hybrid">
+                <div class="widget-content-area br-4 mt-4">
+                  <div class="widget-one">
+                    <h5 class="title-page">Pengeluaran Bulan <span id="monthNameChart2"></span></h5>
+                  </div>
+                  <div>
+                    <div id="expenditure-chart" class=""></div>
                   </div>
                 </div>
               </div>
@@ -145,9 +157,11 @@
 
   <script type="text/javascript">
 
+    let incomeChart = null;
     let expenditureChart = null;
     let data = {
       month : moment().locale("id").format('MM'),
+      incomes: [],
       expenditures: []
     }
 
@@ -165,12 +179,12 @@
     $('#month').on('change', function(e) {
       data.month = $(this).val();
       setMonthName();
-      fetchIncomeSummaryMonthly();
+      fetchIncomeSummaryMonthly(true);
       fetchExpenditureSummaryMonthly(true);
       fetchWealthSummaryMonthly();
     });
 
-    function fetchIncomeSummaryMonthly() {
+    function fetchIncomeSummaryMonthly(update = false) {
       request({
           url: `{{ route('json.admin.income.summary-monthly') }}`,
           method: 'GET',
@@ -179,6 +193,13 @@
           },
           success: function(response) {
             setTotalIncome(response.data.totalIncome);
+            
+            if (update) {
+              data.incomes = response.data.incomes;
+              updateChart()
+            } else {
+              generateIncomeChart(response.data.incomes);
+            }
           },
           error: function(error) {  
             fetchIncomeSummaryMonthly();
@@ -225,6 +246,41 @@
         });
     }
 
+    function generateIncomeChart(data) {
+      var sLineArea = {
+        chart: {
+          height: 350,
+          type: 'area',
+          toolbar: {
+            show: false,
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        series: [
+          {
+            name: 'Pengeluaran',
+            data: data.map(income => income.total_amount)
+          }
+        ],
+        xaxis: {
+          categories: data.map(income => moment(income.date).locale("id").format('DD MMM')),                
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yy'
+          },
+        }
+      }
+
+      incomeChart = new ApexCharts(document.querySelector("#income-chart"), sLineArea);
+      incomeChart.render();
+    }
+
     function generateExpenditureChart(data) {
       var sLineArea = {
         chart: {
@@ -234,6 +290,7 @@
             show: false,
           }
         },
+        colors: ['#e7515a', '#ffe1e1'],
         dataLabels: {
           enabled: false
         },
@@ -256,7 +313,7 @@
         }
       }
 
-      expenditureChart = new ApexCharts(document.querySelector("#s-line-area"), sLineArea);
+      expenditureChart = new ApexCharts(document.querySelector("#expenditure-chart"), sLineArea);
       expenditureChart.render();
     }
 
@@ -293,8 +350,13 @@
 
     function setMonthName() {
       let date = getDate();
-      $('#monthName').text(moment(date).locale("id").format('MMMM YYYY'));
-      $('#monthNameChart').text(moment(date).locale("id").format('MMMM YYYY'));
+      let monthName = moment(date).locale("id").format('MMMM YYYY');
+      $('#monthName').text(monthName);
+      $('#monthNameChart').text(monthName);
+      $('#monthNameChart1').text(monthName);
+      $('#monthNameChart2').text(monthName);
+      $('#monthNameChart3').text(monthName);
+      $('#monthNameChart4').text(monthName);
     }
     
     function setTotalIncome(total) {
@@ -314,6 +376,18 @@
     }
 
     function updateChart() {
+      incomeChart.updateOptions({
+        series: [
+          {
+            name: 'Pengeluaran',
+            data: data.incomes.map(income => income.total_amount)
+          }
+        ],
+        xaxis: {
+          categories: data.incomes.map(income => moment(income.date).locale("id").format('DD MMM')),                
+        },
+      });
+
       expenditureChart.updateOptions({
         series: [
           {

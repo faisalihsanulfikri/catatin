@@ -18,9 +18,11 @@ Route::middleware(["auth"])->group(function() {
 		});
 		Route::name("income.")->prefix("income")->group(function() {
 			Route::get("/", "IncomeController@index")->name("index");
+			Route::get("/summary", "IncomeController@summary")->name("summary");
 		});
 		Route::name("expenditure.")->prefix("expenditure")->group(function() {
 			Route::get("/", "ExpenditureController@index")->name("index");
+			Route::get("/summary", "ExpenditureController@summary")->name("summary");
 		});
 	});
 });

@@ -87,7 +87,7 @@
               <div class="widget widget-one_hybrid">
                 <div class="widget-content-area br-4 mt-4">
                   <div class="widget-one">
-                    <h5 class="title-page">Pengeluaran Bulan <span id="monthNameChart"></span></h5>
+                    <h5 class="title-page">Pengeluaran Bulan <span id="monthNameChart2"></span></h5>
                   </div>
                   <div>
                     <div id="expenditure-chart" class=""></div>
@@ -99,7 +99,38 @@
         </div>
       </div>
 
-
+      <div class="row">
+        <div class="col">
+          <div class="row widget-statistic">
+            <div class="col-6 mb-4">
+              <div class="widget widget-one_hybrid">
+                <div class="widget-content-area br-4 mt-4">
+                  <div class="widget-one">
+                    <h5 class="title-page">Tabel Pemasukan Bulan <span id="monthNameChart3"></span></h5>
+                  </div>
+                  <div>
+                    @component("admin.components.table-summary-income")
+                    @endcomponent
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 mb-4">
+              <div class="widget widget-one_hybrid">
+                <div class="widget-content-area br-4 mt-4">
+                  <div class="widget-one">
+                    <h5 class="title-page">Tabel Pengeluaran Bulan <span id="monthNameChart4"></span></h5>
+                  </div>
+                  <div>
+                    @component("admin.components.table-summary-expenditure")
+                    @endcomponent
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -261,8 +292,13 @@
     }
 
     function setMonthName() {
-      $('#monthName').text(moment().locale("id").format('MMMM YYYY'));
-      $('#monthNameChart').text(moment().locale("id").format('MMMM YYYY'));
+      let monthName = moment().locale("id").format('MMMM YYYY');
+      $('#monthName').text(monthName);
+      $('#monthNameChart').text(monthName);
+      $('#monthNameChart1').text(monthName);
+      $('#monthNameChart2').text(monthName);
+      $('#monthNameChart3').text(monthName);
+      $('#monthNameChart4').text(monthName);
     }
     
     function setTotalIncome(total) {

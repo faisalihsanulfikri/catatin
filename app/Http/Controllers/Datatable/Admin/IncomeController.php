@@ -31,4 +31,21 @@ class IncomeController extends Controller
       })
       ->make(true);
   }
+
+  public function summary()
+  {
+    $incomes = Income::selectRaw('description, SUM(amount) as total_amount')->where('user_id', Auth::user()->getId());
+    $incomes = $incomes->groupBy('description');
+    $incomes = $incomes->get()->sortByDesc('total_amount');
+
+    return Datatables::of($incomes)
+      ->addIndexColumn()
+      ->editColumn("limit_description", function($expenditure) {
+        return $expenditure->getLimitDescription();
+      })
+      ->editColumn("formated_amount", function($expenditure) {
+        return number_format($expenditure->total_amount);
+      })
+      ->make(true);
+  }
 }
