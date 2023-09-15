@@ -71,22 +71,35 @@
       <div class="row">
         <div class="col">
           <div class="row widget-statistic">
-            <div class="col-12 mb-4">
+            <div class="col-6 mb-4">
+              <div class="widget widget-one_hybrid">
+                <div class="widget-content-area br-4 mt-4">
+                  <div class="widget-one">
+                    <h5 class="title-page">Pemasukan Bulan <span id="monthNameChart"></span></h5>
+                  </div>
+                  <div>
+                    <div id="income-chart" class=""></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 mb-4">
               <div class="widget widget-one_hybrid">
                 <div class="widget-content-area br-4 mt-4">
                   <div class="widget-one">
                     <h5 class="title-page">Pengeluaran Bulan <span id="monthNameChart"></span></h5>
                   </div>
                   <div>
-                    <div id="s-line-area" class=""></div>
+                    <div id="expenditure-chart" class=""></div>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
+
+
 
     </div>
   </div>
@@ -134,6 +147,7 @@
             month: data.month
           },
           success: function(response) {
+            generateIncomeChart(response.data.incomes);
             setTotalIncome(response.data.totalIncome);
           },
           error: function(error) {  
@@ -175,6 +189,41 @@
         });
     }
 
+    function generateIncomeChart(data) {
+      var sLineArea = {
+        chart: {
+          height: 350,
+          type: 'area',
+          toolbar: {
+            show: false,
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        series: [
+          {
+            name: 'Pengeluaran',
+            data: data.map(income => income.total_amount)
+          }
+        ],
+        xaxis: {
+          categories: data.map(income => moment(income.date).locale("id").format('DD MMM')),                
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yy'
+          },
+        }
+      }
+
+      var chart = new ApexCharts(document.querySelector("#income-chart"),sLineArea);
+      chart.render();
+    }
+
     function generateExpenditureChart(data) {
       var sLineArea = {
         chart: {
@@ -184,6 +233,7 @@
             show: false,
           }
         },
+        colors: ['#e7515a', '#ffe1e1'],
         dataLabels: {
           enabled: false
         },
@@ -206,7 +256,7 @@
         }
       }
 
-      var chart = new ApexCharts(document.querySelector("#s-line-area"),sLineArea);
+      var chart = new ApexCharts(document.querySelector("#expenditure-chart"),sLineArea);
       chart.render();
     }
 
