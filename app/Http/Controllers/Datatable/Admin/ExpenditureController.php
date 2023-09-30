@@ -36,7 +36,7 @@ class ExpenditureController extends Controller
   {
     $date = getDateFromMonth(request()->month);
 
-    $expenditures = Expenditure::selectRaw('description, SUM(amount) as total_amount')
+    $expenditures = Expenditure::selectRaw('description, COUNT(id) as qty, SUM(amount) as total_amount')
                     ->where('user_id', Auth::user()->getId())
                     ->wherebetween("date", [$date->start, $date->end])
                     ->groupBy('description')

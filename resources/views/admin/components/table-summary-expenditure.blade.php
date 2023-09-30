@@ -3,7 +3,8 @@
   <thead>
     <tr>
       <th width="5%">No</th>
-      <th width="65%">Keterangan</th>
+      <th width="60%">Keterangan</th>
+      <th width="5%">Qty</th>
       <th width="30%">Total</th>
     </tr>
   </thead>
@@ -60,8 +61,9 @@
 			},
 			columns: [
 				{ data: 'DT_RowIndex' },
-				{ data: 'limit_description', name: 'limit_description' },
-				{ orderable: false, render: templateDataX.styles.amount },
+				{ orderable: false, data: 'limit_description', name: 'limit_description' },
+				{ data: 'qty', name: 'qty' },
+				{ data: 'formated_amount', name: 'formated_amount' }
 			]
 		});
 

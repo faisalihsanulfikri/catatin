@@ -36,7 +36,7 @@ class IncomeController extends Controller
   {
     $date = getDateFromMonth(request()->month);
     
-    $incomes = Income::selectRaw('description, SUM(amount) as total_amount')
+    $incomes = Income::selectRaw('description, COUNT(id) as qty, SUM(amount) as total_amount')
               ->where('user_id', Auth::user()->getId())
               ->wherebetween("date", [$date->start, $date->end])
               ->groupBy('description')
