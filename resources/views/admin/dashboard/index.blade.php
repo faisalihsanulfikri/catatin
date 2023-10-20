@@ -206,13 +206,13 @@
 
     function fetchWealthSummary() {
       request({
-          url: `{{ route('json.admin.wealth.summary') }}`,
+          url: `{{ route('json.admin.wealth.summary-monthly') }}`,
           method: 'GET',
           data: {
             month: data.month
           },
           success: function(response) {
-            setTotalWealth(response.data.formated_amount);
+            setTotalWealth(response.data.totalAsset);
           },
           error: function(error) {  
             fetchWealthSummary()
